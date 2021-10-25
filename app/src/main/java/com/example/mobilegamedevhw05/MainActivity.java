@@ -1,19 +1,26 @@
 package com.example.mobilegamedevhw05;
-
+//METEHAN KUNDAK
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.SparseArray;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 
-public class MainActivity<BarcodeDetector> extends AppCompatActivity {
+import java.io.IOException;
 
+public class MainActivity<BarcodeDetector, Barcode> extends AppCompatActivity {
+
+    private static final int REQUEST_CAMERA_PERMISSION = ;
     SurfaceView surfaceView;
     CameraSource cameraSource;
     TextView textView;
@@ -37,7 +44,7 @@ public class MainActivity<BarcodeDetector> extends AppCompatActivity {
                 .setBarcodeFormats(Barcode.ALL_FORMATS)
                 .build();
 
-        cameraSource = new CameraSource.Builder(this, barcodeDetector)
+        cameraSource = new CameraSource.Builder(this, (Detector<?>) barcodeDetector)
                 .setRequestedPreviewSize(1920, 1080)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
@@ -71,7 +78,7 @@ public class MainActivity<BarcodeDetector> extends AppCompatActivity {
         });
 
 
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
+        ((Detector<?>) barcodeDetector).setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
                 // Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
@@ -83,12 +90,15 @@ public class MainActivity<BarcodeDetector> extends AppCompatActivity {
                 if (((SparseArray<?>) barcodes).size() != 0) {
 
 
+                    Handler barcodeText;
                     barcodeText.post(new Runnable() {
 
                         @Override
                         public void run() {
 
-                            Handler barcodeText;
+                            Handler barcodeText = null;
+                            Object barcodeData;
+                            ToneGenerator toneGen1 = null;
                             if (barcodes.valueAt(0).email != null) {
                                 barcodeText.removeCallbacks(null);
                                 barcodeData = barcodes.valueAt(0).email.address;
