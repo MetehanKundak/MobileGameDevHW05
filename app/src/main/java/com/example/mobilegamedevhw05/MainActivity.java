@@ -1,32 +1,35 @@
 package com.example.mobilegamedevhw05;
 //METEHAN KUNDAK
-import androidx.appcompat.app.AppCompatActivity;
-import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
-import com.thecodecity.mapsdirection.R;
 
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity {
 
     GoogleMap map;
     Button btnGetDirection;
-    MarkerOptions place1 , place2;
+    MarkerOptions place1, place2;
     Polyline currentPolyLine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnGetDirection = findViewById(R.id.btnGetDirection);
+        Fragment fragment = new MapFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
+
+    }
+}
+
+     /*   btnGetDirection = findViewById(R.id.btnGetDirection);
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFrag);
         mapFragment.getMapAsync(this);
 
@@ -56,10 +59,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onTaskDone(Object... values) {
+        Polyline currentPolyline = null;
         if (currentPolyline != null)
             currentPolyline.remove();
+        GoogleMap mMap = null;
         currentPolyline = mMap.addPolyline((PolylineOptions) values[0]);
     }
 }
+*/
